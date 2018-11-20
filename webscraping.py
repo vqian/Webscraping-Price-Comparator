@@ -1,3 +1,7 @@
+##########################################################
+# Back-end web-scraping with requests and Beautiful Soup #
+##########################################################
+
 import requests
 
 #url = "https://www.amazon.com/Dell-XPS-13-2018/s?page=1&rh=i%3Aaps%2Ck%3ADell%20XPS%2013%20%282018%29"
@@ -14,6 +18,10 @@ start = fullText.find("Showing selected results")
 end =  fullText.find("Previous Page")
 clippedText = fullText[start : end]
 
+##################
+# Parsing prices #
+##################
+
 prices = []
 count = 0
 for fragment in clippedText.split("$"):
@@ -23,6 +31,7 @@ for fragment in clippedText.split("$"):
         if len(price) <= 10 and len(price) >= 3:
             price = price.replace(",", "")
             prices.append(float(price))
+
 lowestPrice = prices[0]
 highestPrice = prices[0]
 sumPrices = 0
@@ -31,6 +40,7 @@ for price in prices:
     lowestPrice = min(lowestPrice, price)
     highestPrice = max(highestPrice, price)
 averagePrice = sumPrices / len(prices)
+
 print("Lowest Price = $%0.2f" % lowestPrice)
 print("Average Price = $%0.2f" % averagePrice)
 print("Highest Price = $%0.2f" % highestPrice)
