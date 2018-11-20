@@ -8,7 +8,7 @@ from UserInput import UserInput
 def getUserInput(prompt):
     inputBox = UserInput(prompt)
     inputBox.waitForInput()
-    return inputBox.getString()
+    return inputBox.getInput()
 
 """
 Parameters: Struct data
@@ -16,8 +16,8 @@ Sets values for data
 """
 def init(data):
     userInput = getUserInput("Please enter item name")
-    print(userInput)
     data.userInput = userInput
+    print(data.userInput)
 
 """
 Parameters: event variable holding data captured by event loop, Struct data
@@ -42,6 +42,7 @@ def redrawAll(canvas, data):
 
 """
 Parameters: ints width, height for dimensions of canvas in pixels
+Code from course notes
 """
 def run(width = 600, height = 600):
     def redrawAllWrapper(canvas, data):

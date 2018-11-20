@@ -3,28 +3,28 @@ from tkinter import *
 class UserInput(object):
     def __init__(self, prompt):
         self.root = Tk()
-        self.string = ""
         self.frame = Frame(self.root)
         self.frame.pack()        
-        self.acceptInput(prompt)
-
-    def acceptInput(self, prompt):
-        r = self.frame
-
-        k = Label(r, text = prompt)
-        k.pack(side = "left")
-        self.e = Entry(r, text = "Item Name")
-        self.e.pack(side = "left")
-        self.e.focus_set()
-        b = Button(r, text = "Enter", command = self.getText)
-        b.pack(side = "right")
+        self.allowInput(prompt)
+        self.input = ""
 
     def getText(self):
-        self.string = self.e.get()
+        self.input = self.inputLabel.get()
         self.root.destroy()
 
-    def getString(self):
-        return self.string
+    def allowInput(self, prompt):
+        frame1 = self.frame
+
+        inputLabel = Label(frame1, text = prompt)
+        inputLabel.pack(side = "left")
+        self.inputLabel = Entry(frame1, text = "Item Name")
+        self.inputLabel.pack(side = "left")
+        self.inputLabel.focus_set()
+        enterButton = Button(frame1, text = "Enter", command = self.getText)
+        enterButton.pack(side = "right")
+
+    def getInput(self):
+        return self.input
 
     def waitForInput(self):
         self.root.mainloop()
