@@ -1,5 +1,8 @@
 from tkinter import *
 
+"""
+Inspired by https://stackoverflow.com/questions/15522336/text-input-in-tkinter
+"""
 class UserInput(object):
     def __init__(self, prompt):
         self.root = Tk()
@@ -28,3 +31,11 @@ class UserInput(object):
 
     def waitForInput(self):
         self.root.mainloop()
+
+def getUserInput(prompt):
+    inputBox = UserInput(prompt)
+    inputBox.waitForInput()
+    return inputBox.getInput()
+
+userInput = getUserInput("Please enter item name")
+print("User Input:", userInput)

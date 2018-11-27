@@ -5,6 +5,47 @@
 import requests
 
 """
+Helper Method for searchURLs(userInput)
+Parameters: list of strings userInput of keywords
+Return: list of urls for Amazon, eBay, Walmart
+"""
+def getURLs(userInput):
+    urls = []
+    urlAmazon = "https://www.amazon.com/s?url=field-keywords="
+    urlEbay = "https://ebay.com/sch/i.html?_nkw="    
+    urlWalmart = "https://www.walmart.com/search/?query="
+
+    for keyword in userInput:
+        keyword = keyword.replace(" ", "+")
+        urlAmazon += keyword + "+"
+        keyword = keyword.replace("+", "%20")
+        urlEbay += keyword + "%20"
+        urlWalmart += keyword + "%20"
+    urlAmazon = urlAmazon[:-1]
+    urlEbay = urlEbay[:-3]
+    urlWalmart = urlWalmart[:-3]
+    
+    urls.append(urlAmazon)
+    urls.append(urlEbay)
+    urls.append(urlWalmart)
+    
+    return urls
+
+"""
+Parameters: list of strings userInput of keywords
+Calls getURLs(urserInput), parses prices on webpages of urls
+"""
+def searchURLs(userInput):
+    urls = getURLs(userInput)
+    for url in urls:
+        if "amazon.com" in url:
+            parseAmazon(url)
+        elif "ebay.com" in url:
+            parseEbay(url)
+        elif "walmart.com" in url:
+            parseWalmart(url)
+
+"""
 Parameters: string url
 Return: string fullText of HTML file 
 """
