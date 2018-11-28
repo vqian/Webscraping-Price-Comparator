@@ -1,6 +1,7 @@
 from tkinter import *
 from webscraping import *
 from UI import *
+import webbrowser
 
 class PriceComparator(object):
     def __init__(self):
@@ -9,6 +10,8 @@ class PriceComparator(object):
         self.inputFields = []
         self.inputLabels = []
         self.userInput = []
+        self.inputMode = True
+        self.priceResultMode = False
         self.run()
 
     def run(self, width = 600, height = 600):
@@ -20,21 +23,25 @@ class PriceComparator(object):
         self.root.resizable(width = False, height = False)
 
         self.drawInputScreen()
+        #self.drawPriceResultScreen()
         self.root.mainloop()
 
     def getInput(self):
-        print("Loading price information...")
-        for row in range(self.numFields):
-            inputText = self.inputFields[row].get()
-            if inputText != "":
-                self.userInput.append(inputText)
+        if self.inputMode:
+            print("Loading price information...")
+            for row in range(self.numFields):
+                inputText = self.inputFields[row].get()
+                if inputText != "":
+                    self.userInput.append(inputText)
 
-        self.priceStatistics = searchURLs(self.userInput)
+            self.priceStatistics = searchURLs(self.userInput)
+        self.inputMode = False
+        self.priceResultMode = True
         drawPriceResultScreen()
 
     def drawInputScreen(self):
         for row in range(self.numFields):
-            inputLabel = Label(root, text = self.fieldLabels[row])
+            inputLabel = Label(self.root, text = self.fieldLabels[row])
             self.inputLabels.append(inputLabel)
             self.inputLabels[row].grid(row  = row, column = 0, sticky = "nsew", padx = 2, pady = 2)
               
@@ -45,9 +52,26 @@ class PriceComparator(object):
 
         Button(self.root, text = "Enter", command = lambda: getInput).grid(row = 21, column = 1)
 
+    def callback(event):
+        webbrowser.open_new(r"http://www.google.com")
+
     def drawPriceResultScreen(self):
-        print(self.priceStatistics)
-        namePosition = self.height / 4
-        self.canvas.create_text(self.width / 2, namePosition, text = "".join(self.userInput), font = "Helvetica 20")
-        pricesPosition = self.height * 3 / 4
-        self.canvas.create_text(self.width / 2, pricesPosition, text = self.priceStatistics, font = "Helvetica 14")
+        if self.priceResultMode:
+            self.name = "".join(self.userInput)
+            print(name)
+            print(self.priceStatistics)
+            namePosition = self.height / 4
+
+            self.canvas = Canvas(self.root, width = self.width, height = self.height)
+            self.canvas.configure(bd = 0, highlightthickness = 0)
+
+            self.canvas.create_text(self.width / 2, namePosition, text = self.name, font = "Helvetica 20")
+            pricesPosition = self.height * 3 / 4
+            self.canvas.create_text(self.width / 2, pricesPosition, text = self.priceStatistics, font = "Helvetica 14")
+            """
+            urls = getURLs(self.userInput)
+            for i in range(len(urls)):
+                link = Label(self.root, text = "Hyperlink: " + urls[i], fg = "blue", cursor = "hand2")
+                link.pack()
+                link.bind("<Button-" + str(i + 1) + ">", callback)
+            """

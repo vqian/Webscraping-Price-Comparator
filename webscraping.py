@@ -40,20 +40,11 @@ def searchURLs(userInput):
     urls = getURLs(userInput)
     for url in urls:
         if "amazon.com" in url:
-            try:
-                result += parseAmazon(url)
-            except:
-                print("Can't parse Amazon")
+            result += parseAmazon(url)
         elif "ebay.com" in url:
-            try:
-                result += parseEbay(url)
-            except:
-                print("Can't parse eBay")
+            result += parseEbay(url)
         elif "walmart.com" in url:
-            try:
-                result += parseWalmart(url)
-            except:
-                print("Can't parse Walmart")
+            result += parseWalmart(url)
 
     return result
 
@@ -77,7 +68,7 @@ Parameters: float array prices
 Return: floats lowestPrice, averagePrice, highestPrice
 """
 def calculatePriceStatistics(prices):
-    lowestPrice, averagePrice, highestPrice = 0, 0 , 0
+    lowestPrice, averagePrice, highestPrice = 0, 0, 0
     try:
         lowestPrice = prices[0]
         highestPrice = prices[0]
@@ -89,6 +80,7 @@ def calculatePriceStatistics(prices):
         averagePrice = sumPrices / len(prices)
     except:
         print("Failed to parse:", prices)
+        return lowestPrice, averagePrice, highestPrice
 
     return lowestPrice, averagePrice, highestPrice
 
@@ -131,7 +123,10 @@ def parseAmazon(url):
             price = fragment.splitlines()[0]
             if len(price) <= 10 and len(price) >= 3:
                 price = price.replace(",", "")
-                prices.append(float(price))
+                try:
+                    prices.append(float(price))
+                except:
+                    continue
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
