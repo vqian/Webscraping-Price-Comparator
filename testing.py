@@ -1,7 +1,39 @@
 from tkinter import *
 from UserInput import UserInput
 from webscraping import *
+from PriceComparator import *
 
+p = PriceComparator()
+p.drawPriceResultScreen()
+
+def drawPriceResultScreen(self):
+    if self.priceResultMode:
+        self.name = " ".join(self.userInput)
+        print(self.name)
+        print(self.priceStatistics)
+        namePosition = self.height / 4
+
+        self.canvas = Canvas(self.root, width = self.width, height = self.height)
+        self.canvas.configure(bd = 0, highlightthickness = 0)
+        #self.canvas.delete("all")
+
+        self.canvas.create_text(self.width / 2, namePosition, text = self.name, font = "Helvetica 20")
+        pricesPosition = self.height * 3 / 4
+        self.canvas.create_text(self.width / 2, pricesPosition, text = self.priceStatistics, font = "Helvetica 14")
+           
+        urls = getURLs(self.userInput)
+        for i in range(len(urls)):
+            link = Label(self.root, text = "Hyperlink: " + urls[i], fg = "blue", cursor = "hand2")
+            #link.pack()
+            link.bind("<Button-" + str(i + 1) + ">", self.callback)
+
+"""
+self.userInput = "Sample Product"
+self.priceStatistics = "Sample Statistics"
+p.drawPriceResultScreen()
+"""
+
+"""
 def getUserInput(prompt):
     inputBox = UserInput(prompt)
     inputBox.waitForInput()
@@ -9,6 +41,7 @@ def getUserInput(prompt):
 
 userInput = getUserInput("Please enter item name")
 print("User Input:", userInput)
+"""
 
 ################
 # Testing code #
@@ -39,5 +72,3 @@ def testAll():
     testEbay()
     print("Testing Walmart parsing...")
     testWalmart()
-
-testAll()

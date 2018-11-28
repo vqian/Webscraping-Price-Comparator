@@ -1,6 +1,6 @@
 from tkinter import *
 from webscraping import *
-from UI import *
+#from UI import *
 import webbrowser
 
 class PriceComparator(object):
@@ -10,8 +10,10 @@ class PriceComparator(object):
         self.inputFields = []
         self.inputLabels = []
         self.userInput = []
+
         self.inputMode = True
         self.priceResultMode = False
+
         self.run()
 
     def run(self, width = 600, height = 600):
@@ -23,7 +25,6 @@ class PriceComparator(object):
         self.root.resizable(width = False, height = False)
 
         self.drawInputScreen()
-        #self.drawPriceResultScreen()
         self.root.mainloop()
 
     def getInput(self):
@@ -35,43 +36,46 @@ class PriceComparator(object):
                     self.userInput.append(inputText)
 
             self.priceStatistics = searchURLs(self.userInput)
-        self.inputMode = False
-        self.priceResultMode = True
-        drawPriceResultScreen()
+
+            self.inputMode = False
+            self.priceResultMode = True
+
+            self.drawPriceResultScreen()
 
     def drawInputScreen(self):
-        for row in range(self.numFields):
-            inputLabel = Label(self.root, text = self.fieldLabels[row])
-            self.inputLabels.append(inputLabel)
-            self.inputLabels[row].grid(row  = row, column = 0, sticky = "nsew", padx = 2, pady = 2)
-              
-            fieldName = "input" + str(row)
-            fieldName = Entry(self.root)
-            self.inputFields.append(fieldName)
-            self.inputFields[row].grid(row  = row, column = 1, sticky = "nsew", padx = 2, pady = 2)
+        if self.inputMode:
+            for row in range(self.numFields):
+                inputLabel = Label(self.root, text = self.fieldLabels[row])
+                self.inputLabels.append(inputLabel)
+                self.inputLabels[row].grid(row  = row, column = 0, sticky = "nsew", padx = 2, pady = 2)
+                  
+                fieldName = "input" + str(row)
+                fieldName = Entry(self.root)
+                self.inputFields.append(fieldName)
+                self.inputFields[row].grid(row  = row, column = 1, sticky = "nsew", padx = 2, pady = 2)
 
-        Button(self.root, text = "Enter", command = lambda: getInput).grid(row = 21, column = 1)
+            Button(self.root, text = "Enter", command = self.getInput).grid(row = 21, column = 1)
 
     def callback(event):
         webbrowser.open_new(r"http://www.google.com")
 
     def drawPriceResultScreen(self):
         if self.priceResultMode:
-            self.name = "".join(self.userInput)
-            print(name)
+            self.name = " ".join(self.userInput)
+            print(self.name)
             print(self.priceStatistics)
             namePosition = self.height / 4
 
             self.canvas = Canvas(self.root, width = self.width, height = self.height)
             self.canvas.configure(bd = 0, highlightthickness = 0)
+            #self.canvas.delete("all")
 
             self.canvas.create_text(self.width / 2, namePosition, text = self.name, font = "Helvetica 20")
             pricesPosition = self.height * 3 / 4
             self.canvas.create_text(self.width / 2, pricesPosition, text = self.priceStatistics, font = "Helvetica 14")
-            """
+            
             urls = getURLs(self.userInput)
             for i in range(len(urls)):
                 link = Label(self.root, text = "Hyperlink: " + urls[i], fg = "blue", cursor = "hand2")
-                link.pack()
-                link.bind("<Button-" + str(i + 1) + ">", callback)
-            """
+                #link.pack()
+                link.bind("<Button-" + str(i + 1) + ">", self.callback)

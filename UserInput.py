@@ -36,6 +36,7 @@ def getUserInput(prompt):
     inputBox = UserInput(prompt)
     inputBox.waitForInput()
     return inputBox.getInput()
-
+"""
 userInput = getUserInput("Please enter item name")
 print("User Input:", userInput)
+"""

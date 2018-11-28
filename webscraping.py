@@ -53,8 +53,20 @@ Parameters: string url
 Return: string fullText of HTML file 
 """
 def getHMTLText(url):
+    """
     website = requests.get(url)
     source = website.text # HTML doc
+    """
+    source = ""
+    if "amazon.com" in url:
+        with open('AmazonHTML.txt', 'r') as file:
+            source = file.read()
+    elif "ebay.com" in url:
+        with open('EbayHTML.txt', 'r') as file:
+            source = file.read()
+    elif "walmart.com" in url:
+        with open('WalmartHTML.txt', 'r') as file:
+            source = file.read()
 
     from bs4 import BeautifulSoup
 
@@ -130,7 +142,7 @@ def parseAmazon(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
-    return formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
+    return "Amazon Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
 
 ###########################
 # Parsing prices for eBay #
@@ -158,7 +170,7 @@ def parseEbay(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
-    return formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
+    return "eBay Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
 
 ##############################
 # Parsing prices for Walmart #
@@ -184,4 +196,4 @@ def parseWalmart(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
-    return formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
+    return "Walmart Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
