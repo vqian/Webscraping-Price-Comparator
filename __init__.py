@@ -1,11 +1,4 @@
-from tkinter import *
-from UserInput import UserInput
-from webscraping import *
-from UI import *
+from PriceComparator import *
 
-###############
-# Run Program #
-###############
-
-def runApp():
-	run()
+p = PriceComparator()
+p.run()

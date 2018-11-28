@@ -36,14 +36,26 @@ Parameters: list of strings userInput of keywords
 Calls getURLs(urserInput), parses prices on webpages of urls
 """
 def searchURLs(userInput):
+    result = ""
     urls = getURLs(userInput)
     for url in urls:
         if "amazon.com" in url:
-            parseAmazon(url)
+            try:
+                result += parseAmazon(url)
+            except:
+                print("Can't parse Amazon")
         elif "ebay.com" in url:
-            parseEbay(url)
+            try:
+                result += parseEbay(url)
+            except:
+                print("Can't parse eBay")
         elif "walmart.com" in url:
-            parseWalmart(url)
+            try:
+                result += parseWalmart(url)
+            except:
+                print("Can't parse Walmart")
+
+    return result
 
 """
 Parameters: string url
@@ -65,14 +77,18 @@ Parameters: float array prices
 Return: floats lowestPrice, averagePrice, highestPrice
 """
 def calculatePriceStatistics(prices):
-    lowestPrice = prices[0]
-    highestPrice = prices[0]
-    sumPrices = 0
-    for price in prices:
-        sumPrices += price
-        lowestPrice = min(lowestPrice, price)
-        highestPrice = max(highestPrice, price)
-    averagePrice = sumPrices / len(prices)
+    lowestPrice, averagePrice, highestPrice = 0, 0 , 0
+    try:
+        lowestPrice = prices[0]
+        highestPrice = prices[0]
+        sumPrices = 0
+        for price in prices:
+            sumPrices += price
+            lowestPrice = min(lowestPrice, price)
+            highestPrice = max(highestPrice, price)
+        averagePrice = sumPrices / len(prices)
+    except:
+        print("Failed to parse:", prices)
 
     return lowestPrice, averagePrice, highestPrice
 
@@ -84,6 +100,17 @@ def printPriceStatistics(lowestPrice, averagePrice, highestPrice):
     print("Lowest Price = $%0.2f" % lowestPrice)
     print("Average Price = $%0.2f" % averagePrice)
     print("Highest Price = $%0.2f" % highestPrice)
+
+"""
+Parameters: floats lowestPrice, averagePrice, highestPrice
+Return: string of formatted price statistics 
+"""
+def formatPriceStatistics(lowestPrice, averagePrice, highestPrice):
+    result = ""
+    result += "Lowest Price = $%0.2f\n" % lowestPrice
+    result += "Average Price = $%0.2f\n" % averagePrice
+    result += "Highest Price = $%0.2f\n" % highestPrice
+    return result
 
 #############################
 # Parsing prices for Amazon #
@@ -108,7 +135,7 @@ def parseAmazon(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
-    printPriceStatistics(lowestPrice, averagePrice, highestPrice)
+    return formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
 
 ###########################
 # Parsing prices for eBay #
@@ -136,7 +163,7 @@ def parseEbay(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
-    printPriceStatistics(lowestPrice, averagePrice, highestPrice)
+    return formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
 
 ##############################
 # Parsing prices for Walmart #
@@ -162,4 +189,4 @@ def parseWalmart(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
-    printPriceStatistics(lowestPrice, averagePrice, highestPrice)
+    return formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
