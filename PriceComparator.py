@@ -1,6 +1,7 @@
 from tkinter import *
 from webscraping import *
 #from UI import *
+from testing import *
 import webbrowser
 
 class PriceComparator(object):
@@ -40,7 +41,12 @@ class PriceComparator(object):
             self.inputMode = False
             self.priceResultMode = True
 
-            self.drawPriceResultScreen()
+            #self.drawPriceResultScreen()
+            t = Tester()
+            t.priceResultMode = self.priceResultMode
+            t.userInput = self.userInput
+            t.priceStatistics = self.priceStatistics
+            t.run()
 
     def drawInputScreen(self):
         if self.inputMode:
@@ -68,6 +74,7 @@ class PriceComparator(object):
 
             self.canvas = Canvas(self.root, width = self.width, height = self.height)
             self.canvas.configure(bd = 0, highlightthickness = 0)
+            #self.canvas.pack()
             #self.canvas.delete("all")
 
             self.canvas.create_text(self.width / 2, namePosition, text = self.name, font = "Helvetica 20")

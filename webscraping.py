@@ -40,11 +40,11 @@ def searchURLs(userInput):
     urls = getURLs(userInput)
     for url in urls:
         if "amazon.com" in url:
-            result += parseAmazon(url)
+            result += parseAmazon(url) + "\n\n"
         elif "ebay.com" in url:
-            result += parseEbay(url)
+            result += parseEbay(url) + "\n\n"
         elif "walmart.com" in url:
-            result += parseWalmart(url)
+            result += parseWalmart(url) + "\n\n"
 
     return result
 
@@ -53,9 +53,12 @@ Parameters: string url
 Return: string fullText of HTML file 
 """
 def getHMTLText(url):
-    """
     website = requests.get(url)
     source = website.text # HTML doc
+    """
+    The following code uses saved HTML docs for testing when webscraping 
+    cannot pass Recaptcha robot check
+    """
     """
     source = ""
     if "amazon.com" in url:
@@ -67,7 +70,7 @@ def getHMTLText(url):
     elif "walmart.com" in url:
         with open('WalmartHTML.txt', 'r') as file:
             source = file.read()
-
+    """
     from bs4 import BeautifulSoup
 
     parser = BeautifulSoup(source, 'html.parser')
