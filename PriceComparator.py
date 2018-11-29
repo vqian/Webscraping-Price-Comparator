@@ -15,7 +15,7 @@ class PriceComparator(object):
         self.inputMode = True
         self.priceResultMode = False
 
-        self.run()
+        #self.run()
 
     def run(self, width = 600, height = 600):
         class Struct(object): pass

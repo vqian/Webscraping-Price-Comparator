@@ -1,3 +1,6 @@
+"""
+Code from course website
+"""
 import urllib.request
 import base64
 import math
