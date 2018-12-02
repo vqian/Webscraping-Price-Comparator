@@ -1,7 +1,6 @@
 from tkinter import *
 from webscraping import *
-#from UI import *
-from testing import *
+from PriceResults import *
 import webbrowser
 
 class PriceComparator(object):
@@ -42,11 +41,11 @@ class PriceComparator(object):
             self.priceResultMode = True
 
             #self.drawPriceResultScreen()
-            t = Tester()
-            t.priceResultMode = self.priceResultMode
-            t.userInput = self.userInput
-            t.priceStatistics = self.priceStatistics
-            t.run()
+            pr = PriceResults()
+            pr.priceResultMode = self.priceResultMode
+            pr.userInput = self.userInput
+            pr.priceStatistics = self.priceStatistics
+            pr.run()
 
     def drawInputScreen(self):
         if self.inputMode:

@@ -21,8 +21,11 @@ def get_background_of_widget(widget):
     
     return background
 
-class Link_Button(Label, object):
-    def __init__(self, master, text, background=None, font=None, familiy=None, size=None, underline=True, visited_fg = "#551A8B", normal_fg = "#0000EE", visited=False, action=None):
+class LinkButton(Label, object):
+    def __init__(self, master, text, background = None, font = None, 
+                family = None, size = None, underline = True, 
+                visited_fg = "#551A8B", normal_fg = "#0000EE", 
+                visited = False, action = None):
         self._visited_fg = visited_fg
         self._normal_fg = normal_fg
         
@@ -38,9 +41,10 @@ class Link_Button(Label, object):
             if size is None:
                 size = default_font.cget("size")
 
-            font = Font(family=family, size=size, underline=underline)
+            font = Font(family = family, size = size, underline = underline)
 
-        Label.__init__(self, master, text=text, fg=fg, cursor="hand2", font=font)
+        Label.__init__(self, master, text = text, fg = fg, cursor = "hand2", 
+                        font = font)
 
         if background is None:
             background = get_background_of_widget(master)
@@ -59,15 +63,15 @@ class Link_Button(Label, object):
     @visited.setter
     def visited(self, is_visited):
         if is_visited:
-            self.configure(fg=self._visited_fg)
+            self.configure(fg = self._visited_fg)
             self._visited = True
         else:
-            self.configure(fg=self._normal_fg)
+            self.configure(fg = self._normal_fg)
             self._visited = False
 
     def _on_click(self, event):
         if not self._visited:
-            self.configure(fg=self._visited_fg)
+            self.configure(fg = self._visited_fg)
 
         self._visited = True
 
