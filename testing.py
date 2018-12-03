@@ -1,12 +1,13 @@
 from webscraping import *
-from Application import *
+from PriceGraph import *
 
-a = Application()
-a.setNumPoints = 5
-for i in range(a.getNumPoints()):
-    a.appendToX(1000 * i)
-    a.appendToY(100 * i)
-a.graphFromPoints()
+p = PriceGraph(T.Tk())
+p.setNumPoints(5)
+for i in range(p.getNumPoints()):
+    p.appendYear(1000 * i)
+    p.appendPrice(100 * i)
+p.graphFromPoints()
+p.run()
 
 """
 self.userInput = "Sample Product"

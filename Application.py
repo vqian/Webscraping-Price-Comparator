@@ -7,24 +7,6 @@ import matplotlib.pyplot as mp
 import tkinter as T, sys
 
 class Application():
-
-    """
-    Beginning of own code
-    """
-    def __init__(self, root):
-        self.root = root 
-
-        self.x1 = []
-        self.y2 = []
-        self.z = 0
-
-        self.root.title("GRAPH")
-        self.root.geometry("600x600")
-        self.root.config(bg = "light gray")
-    """
-    End of own code
-    """
-
     def __init__(self, root):
 
         self.root = root
@@ -87,35 +69,6 @@ class Application():
             self.e.config(bg = 'red')
             self.e.after(1000, lambda: self.e.config(bg = "white"))
 
-    """
-    Beginning of own code
-    """
-    def getNumPoints(self):
-        return self.z
-
-    def setNumPoints(self, numPoints):
-        self.z = numPoints
-
-    def appendToX(self, n):
-        self.x1.append(n)
-
-    def appendToY(self, n):
-        self.y1.append(n)
-
-    def graphFromPoints(self):
-        years = self.x1
-        prices = self.y1
-
-        mp.ion()
-        mp.plot(years, prices)  
-        mp.title("Price Analysis")
-        mp.xlabel("Year")
-        mp.ylabel("Price ($)")
-        mp.draw()
-    """
-    End of own code
-    """
-
     def graph(self):
         self.x1 = []
         self.y1 = []
@@ -136,4 +89,4 @@ class Application():
 """
 Run Program
 """
-#Application(T.Tk()).run()
+Application(T.Tk()).run()

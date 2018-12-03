@@ -33,20 +33,28 @@ def getURLs(userInput):
 
 """
 Parameters: list of strings userInput of keywords
-Calls getURLs(urserInput), parses prices on webpages of urls
+Calls getURLs(userInput), parses prices on webpages of urls
 """
 def searchURLs(userInput):
     result = ""
+    averagePrices = []
+
     urls = getURLs(userInput)
     for url in urls:
         if "amazon.com" in url:
-            result += parseAmazon(url) + "\n\n"
+            parsedResult, averagePrice = parseAmazon(url)
+            result += parsedResult + "\n\n"
+            averagePrices.append(averagePrice)
         elif "ebay.com" in url:
-            result += parseEbay(url) + "\n\n"
+            parsedResult, averagePrice = parseEbay(url)
+            result += parsedResult + "\n\n"
+            averagePrices.append(averagePrice)
         elif "walmart.com" in url:
-            result += parseWalmart(url) + "\n\n"
+            parsedResult, averagePrice = parseWalmart(url)
+            result += parsedResult + "\n\n"
+            averagePrices.append(averagePrice)
 
-    return result
+    return result, averagePrices
 
 """
 Parameters: string url
@@ -145,7 +153,7 @@ def parseAmazon(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
-    return "Amazon Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
+    return ("Amazon Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)), averagePrice
 
 ###########################
 # Parsing prices for eBay #
@@ -173,7 +181,7 @@ def parseEbay(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
-    return "eBay Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
+    return ("eBay Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)), averagePrice
 
 ##############################
 # Parsing prices for Walmart #
@@ -199,4 +207,4 @@ def parseWalmart(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
-    return "Walmart Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)
+    return ("Walmart Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)), averagePrice

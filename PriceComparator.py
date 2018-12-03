@@ -2,8 +2,12 @@ from tkinter import *
 from webscraping import *
 from PriceResults import *
 import webbrowser
+from PriceGraph import *
+from CachedResults import *
 
 class PriceComparator(object):
+    cachedResults = CachedResults()
+
     def __init__(self):
         self.numFields = 4
         self.fieldLabels = ["Brand", "Year", "Model", "Details"]
@@ -13,7 +17,9 @@ class PriceComparator(object):
 
         self.inputMode = True
         self.priceResultMode = False
+        self.priceGraphMode = False
 
+        self.year = 2018
         #self.run()
 
     def run(self, width = 600, height = 600):
@@ -34,18 +40,25 @@ class PriceComparator(object):
                 inputText = self.inputFields[row].get()
                 if inputText != "":
                     self.userInput.append(inputText)
+                    if row == 1 and (type(int(inputText)) == int):
+                        self.year = int(inputText)
 
-            self.priceStatistics = searchURLs(self.userInput)
+            self.priceStatistics, self.averagePrices = None, None
+            name = " ".join(self.userInput)
+            if PriceComparator.cachedResults.isCached(name):
+                print("Matched previously searched entity: loading data...")
+                self.priceStatistics, self.averagePrices = PriceComparator.cachedResults.getCachedPriceStatistics(self.userInput)
+            else:
+                print("No matched previously searched entity: loading data...")
+                self.priceStatistics, self.averagePrices = searchURLs(self.userInput)
+                PriceComparator.cachedResults.cacheResults(name, self.priceStatistics, self.averagePrices)
 
             self.inputMode = False
             self.priceResultMode = True
+            self.priceGraphMode = True
 
-            #self.drawPriceResultScreen()
-            pr = PriceResults()
-            pr.priceResultMode = self.priceResultMode
-            pr.userInput = self.userInput
-            pr.priceStatistics = self.priceStatistics
-            pr.run()
+            self.drawPriceResultScreen()
+            self.drawPriceGraphScreen()
 
     def drawInputScreen(self):
         if self.inputMode:
@@ -61,27 +74,40 @@ class PriceComparator(object):
 
             Button(self.root, text = "Enter", command = self.getInput).grid(row = 21, column = 1)
 
-    def callback(event):
-        webbrowser.open_new(r"http://www.google.com")
-
     def drawPriceResultScreen(self):
-        if self.priceResultMode:
-            self.name = " ".join(self.userInput)
-            print(self.name)
-            print(self.priceStatistics)
-            namePosition = self.height / 4
+        pr = PriceResults()
+        pr.priceResultMode = self.priceResultMode
+        pr.userInput = self.userInput
+        pr.priceStatistics = self.priceStatistics
+        pr.run()
 
-            self.canvas = Canvas(self.root, width = self.width, height = self.height)
-            self.canvas.configure(bd = 0, highlightthickness = 0)
-            #self.canvas.pack()
-            #self.canvas.delete("all")
+    def drawPriceGraphScreen(self):
+        print("Loading graph...")
+        p = PriceGraph(T.Tk())
 
-            self.canvas.create_text(self.width / 2, namePosition, text = self.name, font = "Helvetica 20")
-            pricesPosition = self.height * 3 / 4
-            self.canvas.create_text(self.width / 2, pricesPosition, text = self.priceStatistics, font = "Helvetica 14")
-            
-            urls = getURLs(self.userInput)
-            for i in range(len(urls)):
-                link = Label(self.root, text = "Hyperlink: " + urls[i], fg = "blue", cursor = "hand2")
-                #link.pack()
-                link.bind("<Button-" + str(i + 1) + ">", self.callback)
+        numYears = 3
+        startYear = self.year - (numYears - 1)
+        endYear = self.year + (numYears  - 1)
+        if endYear > 2018:
+            endYear = 2018
+        p.setNumPoints(endYear - startYear + 1)
+
+        for i in range(p.getNumPoints()):
+            searchYear = startYear + i
+            p.appendYear(searchYear)
+            if startYear + i == self.year:
+                amazonPrice, ebayPrice, walmartPrice = self.averagePrices
+                p.appendPrice(0, amazonPrice)
+                p.appendPrice(1, ebayPrice)
+                p.appendPrice(2, walmartPrice)
+            else:
+                searchInput = self.userInput
+                searchInput[1] = str(searchYear)
+                priceStatistics, averagePrices = searchURLs(searchInput)
+                amazonPrice, ebayPrice, walmartPrice = averagePrices
+                p.appendPrice(0, amazonPrice)
+                p.appendPrice(1, ebayPrice)
+                p.appendPrice(2, walmartPrice)
+
+        p.graphFromPoints()
+        p.run()
