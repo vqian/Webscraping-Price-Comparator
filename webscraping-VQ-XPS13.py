@@ -47,12 +47,12 @@ def searchURLs(userInput):
             parsedResult, averagePrice, image = parseAmazon(url)
             result += parsedResult + "\n\n"
             averagePrices.append(averagePrice)
-            #images.append(image)
+            images.append(image)
         elif "ebay.com" in url:
             parsedResult, averagePrice, image = parseEbay(url)
             result += parsedResult + "\n\n"
             averagePrices.append(averagePrice)
-            #images.append(image)
+            images.append(image)
         elif "walmart.com" in url:
             parsedResult, averagePrice, image = parseWalmart(url)
             result += parsedResult + "\n\n"
@@ -136,8 +136,6 @@ def formatPriceStatistics(lowestPrice, averagePrice, highestPrice):
 #############################
 
 def parseAmazon(url):
-    #image = parseImage(url)
-    image = ""
     fullText = getHMTLText(url)
 
     start = fullText.find("Showing selected results")
@@ -159,6 +157,8 @@ def parseAmazon(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
+    image = parseImage(fullText)
+
     return ("Amazon Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)), averagePrice, image
 
 ###########################
@@ -168,8 +168,6 @@ def parseAmazon(url):
 import re
 
 def parseEbay(url):
-    #image = parseImage(url)
-    image = ""
     fullText = getHMTLText(url)
 
     start = fullText.find("results")
@@ -189,6 +187,8 @@ def parseEbay(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
+    image = parseImage(fullText)
+
     return ("eBay Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)), averagePrice, image
 
 ##############################
@@ -196,7 +196,6 @@ def parseEbay(url):
 ##############################
 
 def parseWalmart(url):
-    image = parseImage(url)
     fullText = getHMTLText(url)
 
     start = fullText.find("Current Price")
@@ -216,20 +215,24 @@ def parseWalmart(url):
 
     lowestPrice, averagePrice, highestPrice = calculatePriceStatistics(prices)
 
+    image = parseImage(fullText)
+
     return ("Walmart Results:\n" + formatPriceStatistics(lowestPrice, averagePrice, highestPrice)), averagePrice, image
 
-def parseImage(url):
+def parseImage(fullText):
     """
     images = fullText.findAll('img', src = True)
     for image in images:
         print("Image: " + image)
+    """
 
     #start = findNth(fullText, "img src=", 1)
-
+    """
     start = fullText.find("data-image-src=")
     clippedText = fullText[start:]
     end = clippedText.find(".jpeg")
-
+    """
+    """
     jpg = clippedText.find(".jpeg")
     png = clippedText.find(".png")
     end = min(jpg, png)
@@ -237,20 +240,14 @@ def parseImage(url):
         end = png
     elif png == -1:
         end = jpg
-    
-    clippedText = clippedText[15:end + 5]
     """
+    #clippedText = clippedText[15:end + 5]
 
-    image = "http://www.onelove4ever.com/files/image/error.png"
-    
-    website = requests.get(url)
-    source = website.text
+    images = fullText.findAll("a", {"class":"image"})
+    for image in images:
+        print(image.img['src'])
 
-    parser = BeautifulSoup(source, 'html.parser')
-    image = parser.find(itemprop = "image")
-    image = image["src"]
-
-    return image
+    return clippedText
 
 """
 Code modified from https://www.tutorialspoint.com/How-to-find-the-nth-occurrence-of-substring-in-a-string-in-Python

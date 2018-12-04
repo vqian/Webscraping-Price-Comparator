@@ -3,19 +3,22 @@ from webscraping import *
 from PriceComparator import *
 import webbrowser
 from LinkButton import *
+from image_util import *
 
 class PriceResults(object):
     def __init__(self):
         self.priceResultMode = True
         self.userInput = ""
         self.priceStatistics = ""
+        self.images = []
         #self.run()
 
     def run(self, width = 600, height = 600):
         class Struct(object): pass
         self.width = width
         self.height = height
-        self.root = Tk()
+        #self.root = Tk()
+        self.root = Toplevel()
         self.root.title("Price Comparator") # name of app
         self.root.resizable(width = False, height = False)
 
@@ -73,6 +76,12 @@ class PriceResults(object):
                 link.pack()
                 link.bind("<Button-" + str(i + 1) + ">", lambda = self.hyperlink())
                 """
+
+            for image in self.images:
+                print(image)
+                linkImage = PhotoImageFromLink(image)
+                self.canvas.create_image(self.width // 4, self.height // 2, anchor = NW, image = linkImage) 
+
 """
 t = Tester()
 t.run()

@@ -5,6 +5,7 @@ https://stackoverflow.com/questions/44724111/tkinter-gui-graph
 
 import matplotlib.pyplot as mp
 import tkinter as T, sys
+import numpy as np
 
 class PriceGraph():
     def __init__(self, root):
@@ -39,6 +40,27 @@ class PriceGraph():
         else:
             self.prices2.append(n)
 
+    def getProjection(self, years, prices0, prices1, prices2):
+        projectedPrices0 = np.poly1d(np.polyfit(years, prices0, 1))(years)
+        projectedPrices1 = np.poly1d(np.polyfit(years, prices1, 1))(years)
+        projectedPrices2 = np.poly1d(np.polyfit(years, prices2, 1))(years)
+
+        projectedPrices = []
+        for year in range(len(years)):
+            total = projectedPrices0[year] + projectedPrices1[year] + projectedPrices2[year]
+            averageProjection = total / 3
+            projectedPrices.append(averageProjection)
+        
+        lastPrice = projectedPrices[-1]
+        depreciationFactor = (projectedPrices[-1] - projectedPrices[0]) / len(years)
+        for year in range(years[-1], 2019):
+            projectedPrice = lastPrice + depreciationFactor * (year - years[-1] + 1)
+            projectedPrices.append(projectedPrice)
+
+        tempDepreciation = int(depreciationFactor * 100)
+        roundedDepreciationFactor = str(tempDepreciation // 100) + "." + str(tempDepreciation % 100)
+        return projectedPrices, roundedDepreciationFactor
+
     def graphFromPoints(self):
         mp.ion()
         years = self.getYears()
@@ -46,7 +68,11 @@ class PriceGraph():
         mp.plot(years, prices0)
         mp.plot(years, prices1)
         mp.plot(years, prices2)
-        mp.legend(("Amazon", "eBay", "Walmart"))
+
+        projectedPrices, depreciationFactor = self.getProjection(years, prices0, prices1, prices2)
+        mp.plot(range(years[0], 2020), projectedPrices)
+
+        mp.legend(("Amazon", "eBay", "Walmart", "Projected: Depreciation = $" + str(depreciationFactor) + " per year"))
         mp.title("Average Price over Time")
         mp.xlabel("Year")
         mp.ylabel("Price ($)")

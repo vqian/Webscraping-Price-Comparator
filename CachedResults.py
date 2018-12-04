@@ -2,8 +2,8 @@ class CachedResults(object):
     def __init__(self):
         self.allResults = dict()
 
-    def cacheResults(self, userInput, priceStatistics, averagePrices):
-        self.allResults[userInput] = (priceStatistics, averagePrices)
+    def cacheResults(self, userInput, priceStatistics, averagePrices, images):
+        self.allResults[userInput] = (priceStatistics, averagePrices, images)
 
     def isCached(self, userInput):
         return userInput in self.allResults

@@ -14,6 +14,7 @@ class PriceComparator(object):
         self.inputFields = []
         self.inputLabels = []
         self.userInput = []
+        self.images = []
 
         self.inputMode = True
         self.priceResultMode = False
@@ -50,8 +51,8 @@ class PriceComparator(object):
                 self.priceStatistics, self.averagePrices = PriceComparator.cachedResults.getCachedPriceStatistics(self.userInput)
             else:
                 print("No matched previously searched entity: loading data...")
-                self.priceStatistics, self.averagePrices = searchURLs(self.userInput)
-                PriceComparator.cachedResults.cacheResults(name, self.priceStatistics, self.averagePrices)
+                self.priceStatistics, self.averagePrices, self.images = searchURLs(self.userInput)
+                PriceComparator.cachedResults.cacheResults(name, self.priceStatistics, self.averagePrices, self.images)
 
             self.inputMode = False
             self.priceResultMode = True
@@ -79,6 +80,7 @@ class PriceComparator(object):
         pr.priceResultMode = self.priceResultMode
         pr.userInput = self.userInput
         pr.priceStatistics = self.priceStatistics
+        pr.images = self.images
         pr.run()
 
     def drawPriceGraphScreen(self):
@@ -103,7 +105,7 @@ class PriceComparator(object):
             else:
                 searchInput = self.userInput
                 searchInput[1] = str(searchYear)
-                priceStatistics, averagePrices = searchURLs(searchInput)
+                priceStatistics, averagePrices, images = searchURLs(searchInput)
                 amazonPrice, ebayPrice, walmartPrice = averagePrices
                 p.appendPrice(0, amazonPrice)
                 p.appendPrice(1, ebayPrice)

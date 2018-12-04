@@ -1,6 +1,6 @@
 from webscraping import *
 from PriceGraph import *
-
+"""
 p = PriceGraph(T.Tk())
 p.setNumPoints(5)
 for i in range(p.getNumPoints()):
@@ -8,7 +8,7 @@ for i in range(p.getNumPoints()):
     p.appendPrice(100 * i)
 p.graphFromPoints()
 p.run()
-
+"""
 """
 self.userInput = "Sample Product"
 self.priceStatistics = "Sample Statistics"
@@ -54,3 +54,5 @@ def testAll():
     testEbay()
     print("Testing Walmart parsing...")
     testWalmart()
+
+testWalmart()
