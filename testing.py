@@ -1,5 +1,6 @@
 from webscraping import *
 from PriceGraph import *
+
 """
 p = PriceGraph(T.Tk())
 p.setNumPoints(5)
@@ -55,4 +56,4 @@ def testAll():
     print("Testing Walmart parsing...")
     testWalmart()
 
-testWalmart()
+#testWalmart()

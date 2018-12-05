@@ -32,6 +32,7 @@ class PriceComparator(object):
         self.root.resizable(width = False, height = False)
 
         self.drawInputScreen()
+
         self.root.mainloop()
 
     def getInput(self):
@@ -76,40 +77,43 @@ class PriceComparator(object):
             Button(self.root, text = "Enter", command = self.getInput).grid(row = 21, column = 1)
 
     def drawPriceResultScreen(self):
-        pr = PriceResults()
-        pr.priceResultMode = self.priceResultMode
-        pr.userInput = self.userInput
-        pr.priceStatistics = self.priceStatistics
-        pr.images = self.images
-        pr.run()
+        if self.priceResultMode:
+            pr = PriceResults()
+            pr.priceResultMode = self.priceResultMode
+            pr.userInput = self.userInput
+            pr.priceStatistics = self.priceStatistics
+            pr.images = self.images
+            pr.run()
 
     def drawPriceGraphScreen(self):
-        print("Loading graph...")
-        p = PriceGraph(T.Tk())
+        if self.priceGraphMode:
+            print("Loading graph...")
+            #p = PriceGraph(T.Tk())
+            p = PriceGraph()
 
-        numYears = 3
-        startYear = self.year - (numYears - 1)
-        endYear = self.year + (numYears  - 1)
-        if endYear > 2018:
-            endYear = 2018
-        p.setNumPoints(endYear - startYear + 1)
+            numYears = 3
+            startYear = self.year - (numYears - 1)
+            endYear = self.year + (numYears  - 1)
+            if endYear > 2018:
+                endYear = 2018
+            p.setNumPoints(endYear - startYear + 1)
 
-        for i in range(p.getNumPoints()):
-            searchYear = startYear + i
-            p.appendYear(searchYear)
-            if startYear + i == self.year:
-                amazonPrice, ebayPrice, walmartPrice = self.averagePrices
-                p.appendPrice(0, amazonPrice)
-                p.appendPrice(1, ebayPrice)
-                p.appendPrice(2, walmartPrice)
-            else:
-                searchInput = self.userInput
-                searchInput[1] = str(searchYear)
-                priceStatistics, averagePrices, images = searchURLs(searchInput)
-                amazonPrice, ebayPrice, walmartPrice = averagePrices
-                p.appendPrice(0, amazonPrice)
-                p.appendPrice(1, ebayPrice)
-                p.appendPrice(2, walmartPrice)
+            for i in range(p.getNumPoints()):
+                searchYear = startYear + i
+                p.appendYear(searchYear)
+                if startYear + i == self.year:
+                    amazonPrice, ebayPrice, walmartPrice = self.averagePrices
+                    p.appendPrice(0, amazonPrice)
+                    p.appendPrice(1, ebayPrice)
+                    p.appendPrice(2, walmartPrice)
+                else:
+                    searchInput = self.userInput
+                    searchInput[1] = str(searchYear)
+                    priceStatistics, averagePrices, images = searchURLs(searchInput)
+                    amazonPrice, ebayPrice, walmartPrice = averagePrices
+                    p.appendPrice(0, amazonPrice)
+                    p.appendPrice(1, ebayPrice)
+                    p.appendPrice(2, walmartPrice)
 
-        p.graphFromPoints()
-        p.run()
+            p.graphFromPoints()
+            #p.run()

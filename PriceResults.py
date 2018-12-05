@@ -6,11 +6,18 @@ from LinkButton import *
 from image_util import *
 
 class PriceResults(object):
+    #def __init__(self, canvas):
     def __init__(self):
         self.priceResultMode = True
         self.userInput = ""
         self.priceStatistics = ""
         self.images = []
+
+        self.buttonSize = (0, 0)
+        self.inputButton = (0, 0)
+        self.graphButton = (0, 0)
+
+        #self.canvas = canvas
         #self.run()
 
     def run(self, width = 600, height = 600):
@@ -40,10 +47,11 @@ class PriceResults(object):
             print(self.name)
             print(self.priceStatistics)
             namePosition = self.height / 8
-
+            
             self.canvas = Canvas(self.root, width = self.width, height = self.height)
             self.canvas.configure(bd = 0, highlightthickness = 0)
             self.canvas.pack()
+            
             #self.canvas.delete("all")
 
             self.canvas.create_text(self.width / 2, namePosition, text = self.name, font = "Helvetica 20")
@@ -82,6 +90,14 @@ class PriceResults(object):
                 linkImage = PhotoImageFromLink(image)
                 self.canvas.create_image(self.width // 4, self.height // 2, anchor = NW, image = linkImage) 
 
+            """
+            BUTTONS FOR INPUT AND GRAPH MODES
+            """
+            inputBottomRight = self.inputButton[0] + self.buttonSize[0], self.inputButton[1] + self.buttonSize[1]
+            self.canvas.create_rectangle(self.inputButton, inputBottomRight)
+
+            graphBottomRight = self.graphButton[0] + self.buttonSize[0], self.graphButton[1] + self.buttonSize[1]
+            self.canvas.create_rectangle(self.graphButton, inputBottomRight)
 """
 t = Tester()
 t.run()

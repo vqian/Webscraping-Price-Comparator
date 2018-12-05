@@ -8,8 +8,9 @@ import tkinter as T, sys
 import numpy as np
 
 class PriceGraph():
-    def __init__(self, root):
-        self.root = root 
+    #def __init__(self, root):
+    def __init__(self):
+        #self.root = root 
 
         self.years = []
         self.prices0 = []
